@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -22,6 +23,12 @@ db.on("error", (err) => {
   console.error("Mongoose connection error:", err);
 })
 
+var corsOptions = {
+  origin: 'http://localhost:5176', // 允许的来源
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 允许的 HTTP 方法
+  // allowedHeaders: ['Content-Type', 'Authorization'], // 允许的头信息
+  // credentials: true // 是否允许发送 cookies
+};
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,6 +39,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(cors(corsOptions));
 
 // 路由
 app.use('/', indexRouter);
