@@ -11,11 +11,16 @@ var app = express();
 
 // 设置 Mongoose 连接
 const mongoose = require("mongoose");
-const mongoDB = "mongodb://localhost:27017/cgp";
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoDB = "mongodb://127.0.0.1:27017/cgp";
+mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB 连接错误："));
+db.on("connected", () => {
+  console.log("Mongoose connected to DB");
+});
+db.on("error", (err) => {
+  console.error("Mongoose connection error:", err);
+})
 
 
 // view engine setup
@@ -28,6 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 路由
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
