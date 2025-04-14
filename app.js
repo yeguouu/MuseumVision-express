@@ -7,6 +7,7 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var colsRouter = require("./routes/cols"); 
 
 var app = express();
 
@@ -45,6 +46,7 @@ app.use(cors(corsOptions));
 // 路由
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use("/cols", colsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -61,5 +63,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+app.listen(3004, () => {
+  console.log("server is running");
+});
 module.exports = app;
